@@ -41,10 +41,10 @@ const LobbyPage = ({ onJoin }) => {
     }
   };
 
-  const generateRoomId = () => {
-    const id = Math.random().toString(36).substring(2, 12);
-    setRoomId(id);
-  };
+  // const generateRoomId = () => {
+  //   const id = Math.random().toString(36).substring(2, 12);
+  //   setRoomId(id);
+  // };
 
   const toggleVideo = async () => {
     if (isVideoOn && previewStream) {
@@ -147,9 +147,9 @@ const LobbyPage = ({ onJoin }) => {
               onChange={(e) => setRoomId(e.target.value)}
               className="input-field"
             />
-            <button onClick={generateRoomId} className="generate-btn">
+            {/* <button onClick={generateRoomId} className="generate-btn">
               Generate
-            </button>
+            </button> */}
           </div>
 
           <button
