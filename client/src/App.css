@@ -210,6 +210,7 @@ body {
 
 /* Conference Page Styles */
 .conference-container {
+  flex: 2;
   height: 100vh;
   display: flex;
   flex-direction: column;
@@ -222,7 +223,7 @@ body {
   align-items: center;
   padding: 15px 25px;
   opacity: 0.3;
-  position: fixed;
+  position: absolute;
   top: 10px;
   left: 10px;
   z-index: 100;
@@ -274,6 +275,15 @@ body {
   background: #2d2d2d;
   overflow: hidden;
   transition: all 0.3s ease;
+}
+
+.participant-video-container .minimize-btn {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  background: transparent;
+  border: none;
+  color: #fff;
 }
 
 .video-wrapper {
@@ -343,15 +353,25 @@ body {
 .video-off-icon {
   font-size: 1rem;
 }
-
+.other,
 .me {
   width: 300px;
   height: 150px;
-  position: fixed;
-  bottom: 120px;
+  position: absolute;
+  bottom: 0;
+  background: transparent;
   z-index: 999;
+  & .video-wrapper {
+    opacity: 0.2;
+  }
 }
 
+.other {
+  left: 300px;
+  z-index: 1;
+}
+
+.other .participant-info,
 .me .participant-info {
   left: 0;
   bottom: 0;
@@ -433,6 +453,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  color: #fff;
 }
 
 /* Chat Panel Styles */
@@ -443,6 +464,7 @@ body {
   display: flex;
   flex-direction: column;
   height: 100%;
+  z-index: 2;
 }
 
 .chat-header {
@@ -549,81 +571,6 @@ body {
   background: #5a67d8;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-  .lobby-card {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    max-width: 500px;
-    gap: 0;
-    padding: 1.5rem 2rem;
-  }
-  .conference-main {
-    flex-direction: column;
-  }
-
-  .video-section.with-chat {
-    flex: 1;
-  }
-
-  .chat-panel {
-    width: 100%;
-    height: 300px;
-  }
-
-  .control-panel {
-    padding: 15px 20px;
-  }
-
-  .control-group {
-    gap: 10px;
-  }
-
-  .control-button {
-    width: 50px;
-    height: 50px;
-    font-size: 1.2rem;
-  }
-
-  .participant-counter {
-    padding: 8px 12px;
-    font-size: 0.9rem;
-  }
-
-  .grid-many {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  }
-}
-
-@media (max-width: 480px) {
-  .lobby-card {
-    padding: 30px 20px;
-  }
-
-  .lobby-title {
-    font-size: 2rem;
-  }
-
-  .video-preview {
-    height: 200px;
-  }
-
-  .control-panel {
-    flex-direction: column;
-    gap: 15px;
-  }
-
-  .participant-grid {
-    gap: 10px;
-  }
-
-  .grid-many {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* Scrollbar Styling */
 .chat-messages::-webkit-scrollbar {
   width: 6px;
@@ -693,4 +640,88 @@ body {
 .connection-status.connecting {
   background: #ff9800;
   color: white;
+}
+
+.conference-page {
+  display: flex;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .lobby-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    max-width: 500px;
+    gap: 0;
+    padding: 1.5rem 2rem;
+  }
+
+  .conference-page {
+    position: relative;
+  }
+
+  .conference-container {
+    flex: 1;
+  }
+
+  .conference-main {
+    flex-direction: column;
+  }
+
+  .video-section.with-chat {
+    flex: 1;
+  }
+
+  .chat-panel {
+    width: 100%;
+    height: 300px;
+  }
+
+  .control-panel {
+    padding: 15px 20px;
+  }
+
+  .control-group {
+    gap: 10px;
+  }
+
+  .control-button {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  .participant-counter {
+    padding: 8px 12px;
+    font-size: 0.9rem;
+  }
+
+  .other,
+  .me {
+    width: 100px;
+    height: 150px;
+    position: absolute;
+    bottom: 0;
+    z-index: 999;
+  }
+
+  .other {
+    left: 100px;
+  }
+}
+
+@media (max-width: 480px) {
+  .lobby-card {
+    padding: 30px 20px;
+  }
+
+  .lobby-title {
+    font-size: 2rem;
+  }
+
+  .video-preview {
+    height: 200px;
+  }
 }

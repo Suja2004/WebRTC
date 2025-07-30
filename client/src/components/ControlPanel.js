@@ -7,6 +7,8 @@ import {
   PhoneOff,
   MessageSquareText,
   Users,
+  Expand,
+  Shrink,
 } from "lucide-react";
 
 const ControlPanel = ({
@@ -18,6 +20,8 @@ const ControlPanel = ({
   onToggleChat,
   onLeave,
   participantCount,
+  fullScreen,
+  onToggleFullScreen,
 }) => {
   return (
     <div className="control-panel">
@@ -44,6 +48,13 @@ const ControlPanel = ({
           title="Leave conference"
         >
           <PhoneOff />
+        </button>
+        <button
+          className="control-button"
+          onClick={onToggleFullScreen}
+          title={fullScreen ? "Shrink" : "Expand"}
+        >
+          {fullScreen ? <Shrink /> : <Expand />}
         </button>
       </div>
 

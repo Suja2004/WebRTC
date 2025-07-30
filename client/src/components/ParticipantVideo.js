@@ -1,8 +1,9 @@
-import React, { useRef, useEffect } from "react";
-import { Mic, MicOff, Video, VideoOff } from "lucide-react";
+import React, { useRef, useEffect, useState } from "react";
+import { MicOff, VideoOff, Minimize2, Maximize2 } from "lucide-react";
 
 const ParticipantVideo = ({ participant }) => {
   const videoRef = useRef(null);
+  const [minimize, setMinimize] = useState(false);
 
   useEffect(() => {
     if (videoRef.current && participant.stream) {
@@ -10,21 +11,29 @@ const ParticipantVideo = ({ participant }) => {
     }
   }, [participant.stream]);
 
+  const handleClose = () => {
+    setMinimize((prev) => !prev);
+  };
+
   return (
     <div
-      className={`participant-video-container ${
-        participant.isMe ? "me" : " "
-      } `}
+      className={`participant-video-container ${participant.isMe ? "me" : ""} ${minimize ? "other" : ""
+        }`}
     >
+
+      {!participant.isMe && <button className="minimize-btn" onClick={handleClose} title="minimize/Show">
+
+        {minimize ? <Maximize2 /> : <Minimize2 />}
+      </button>}
+
       <div className="video-wrapper">
         <video
           ref={videoRef}
           autoPlay
           playsInline
           muted={participant.isMe}
-          className={`participant-video ${
-            !participant.isVideoOn ? "video-off" : ""
-          }`}
+          className={`participant-video ${!participant.isVideoOn ? "video-off" : ""
+            }`}
         />
 
         {!participant.isVideoOn && (
