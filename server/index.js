@@ -12,8 +12,8 @@ const io = new Server(server, {
   }
 });
 
-const rooms = new Map(); // roomId -> Set of participants
-const participants = new Map(); // socketId -> participant info
+const rooms = new Map(); 
+const participants = new Map();
 
 io.on('connection', (socket) => {
   console.log(`Socket connected: ${socket.id}`);
@@ -21,10 +21,8 @@ io.on('connection', (socket) => {
   socket.on('room:join', (data) => {
     const { email, name, room } = data;
     
-    // Store participant info
     participants.set(socket.id, { email, name, room });
     
-    // Add to room
     if (!rooms.has(room)) {
       rooms.set(room, new Set());
     }
@@ -32,7 +30,6 @@ io.on('connection', (socket) => {
     
     socket.join(room);
     
-    // Get existing participants in the room
     const existingParticipants = Array.from(rooms.get(room))
       .filter(id => id !== socket.id)
       .map(id => {
@@ -40,12 +37,10 @@ io.on('connection', (socket) => {
         return { id, email: participant.email, name: participant.name };
       });
 
-    // Send existing participants to the new user
     if (existingParticipants.length > 0) {
       socket.emit('room:existing-participants', existingParticipants);
     }
     
-    // Notify others in the room about new user
     socket.to(room).emit('user:joined', { 
       email, 
       name, 
@@ -75,7 +70,6 @@ io.on('connection', (socket) => {
     }
   });
 
-  // WebRTC signaling
   socket.on('webrtc:offer', ({ to, offer }) => {
     const participant = participants.get(socket.id);
     socket.to(to).emit('webrtc:offer', { 
@@ -93,7 +87,6 @@ io.on('connection', (socket) => {
     socket.to(to).emit('webrtc:ice-candidate', { from: socket.id, candidate });
   });
 
-  // Participant state updates
   socket.on('participant:toggle-video', ({ isVideoOn }) => {
     const participant = participants.get(socket.id);
     if (participant) {
@@ -124,19 +117,16 @@ io.on('connection', (socket) => {
     }
   });
 
-  // Chat functionality
   socket.on('chat:message', ({ room, from, name, message, timestamp }) => {
     socket.to(room).emit('chat:message', { from, name, message, timestamp });
   });
 
-  // Handle disconnect
   socket.on('disconnect', () => {
     const participant = participants.get(socket.id);
     
     if (participant) {
       const { room, name } = participant;
       
-      // Remove from room
       if (rooms.has(room)) {
         rooms.get(room).delete(socket.id);
         if (rooms.get(room).size === 0) {
@@ -144,7 +134,6 @@ io.on('connection', (socket) => {
         }
       }
       
-      // Notify others
       socket.to(room).emit('user:left', {
         id: socket.id,
         name
